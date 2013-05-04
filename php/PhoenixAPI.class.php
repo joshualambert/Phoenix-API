@@ -78,40 +78,73 @@ class PhoenixAPI
 
 	public function getStatus( ) 
 	{ 
-		return $this->createUrl( 'status' );
+		return ($this->createUrl( 'status' ) == 'true') ? true : false;
 	}
 
 	public function getInfomation( ) 
 	{
-		return $this->createUrl( 'get' );
+		return $this->createUrl( 'get', false, true );
 	}
 
-	public function getPlayers( ) { }
+	public function getPlayers( ) 
+	{
+		return $this->createUrl( 'players', false, true );
+	}
 
-	public function getPlayerList( ) { }
+	public function getPlayerList( ) 
+	{
+		return $this->createUrl( 'list', true, true );
+	}
 
-	public function getMotd( ) { }
+	public function getMotd( $color = null ) 
+	{
+		return $this->createUrl( 'motd', true, null, (($color == true) ? '&color=true' : null) );
+	}
 
-	public function getVersion( ) { }
+	public function getVersion( ) 
+	{
+		return $this->createUrl( 'version' );
+	}
 
-	public function getPlugins( ) { }
+	public function getPlugins( ) 
+	{
+		return $this->createUrl( 'plugins', true, true );
+	}
 
-	public function getSoftware( ) { }
+	public function getSoftware( ) 
+	{
+		return $this->createUrl( 'software' );
+	}
 
 	public function executeCommand( ) { }
 
-	public function voteTest( ) { }
+	public function voteTest( $port = null ) 
+	{
+		return $this->createUrl( 'votifier', true, null, (($port != null) ? ':'.$port : null) );
+	}
 
-	public function vote( ) { }
+	public function vote( $port, $player, $key ) 
+	{
+		$e = ':'.$port.'&player='.$players.'&key='.$key;
+		return $this->createUrl( 'votifiervote', true, null, $e );
+	}
 
-	protected function createUrl( $m, $c = true, $a = null ) 
+	protected function createUrl( $m, $c = true, $a = null, $e = null ) 
 	{ 
-		$d = file_get_contents('http://api.iamphoenix.me/'.$m.'/?api_key='.$this->license.'&server_ip='.$this->server.(($c == true) ? '&clean=true' : null));
+		$d = file_get_contents('http://api.iamphoenix.me/'.$m.'/?api_key='.$this->license.'&server_ip='.$this->server.(($e != null) ? $e : null).(($c == true) ? '&clean=true' : null));
+
 		if( $a == true )
 		{
-			if( $c == true )
+			if( $c == false )
 			{
-				// code
+				$t = str_replace( array('{','}','"'), null, $d );
+				$ar = explode( ',', $t );
+
+				$d = array();
+				for($i=0;$i<(count($ar));$i++){
+					$ta = explode( ':', $ar[$i] );
+					$d[$ta[0]] = $ta[1];
+				}
 			}
 			else
 			{
