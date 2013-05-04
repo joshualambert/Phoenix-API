@@ -59,7 +59,7 @@ class PhoenixAPI
 	public $license = "";
 
 	// define the server information
-	private $server, $port, $handle;
+	private $server, $handle;
 
 	/**
 	* Save the server address for later use
@@ -70,27 +70,21 @@ class PhoenixAPI
 
 	public function setServer( $server )
 	{
-		if( strpos( $server, ':' ) !== false) {
-	    	$p = explode(':', $server);
-			$this->server = $parts[0];
-			$this->port = $parts[1];
-
-			return true;
-		} 
-		else 
+		if( !$server == null ) 
 		{
-			$this->server = $server;
-			$this->port = 25565;
-
-			return true;
-		}
-
-		return false;
+	    	$this->server = $server;
+	    }
 	}
 
-	public function getStatus( ) { }
+	public function getStatus( ) 
+	{ 
+		return $this->createUrl( 'status' );
+	}
 
-	public function getInfomation( ) { }
+	public function getInfomation( ) 
+	{
+		return $this->createUrl( 'get' );
+	}
 
 	public function getPlayers( ) { }
 
@@ -110,7 +104,23 @@ class PhoenixAPI
 
 	public function vote( ) { }
 
-	protected function createUrl( ) { }
+	protected function createUrl( $m, $c = true, $a = null ) 
+	{ 
+		$d = file_get_contents('http://api.iamphoenix.me/'.$m.'/?api_key='.$this->license.'&server_ip='.$this->server.(($c == true) ? '&clean=true' : null));
+		if( $a == true )
+		{
+			if( $c == true )
+			{
+				// code
+			}
+			else
+			{
+				$d = explode( ',', $d );
+			}
+		}
+			
+		return ($d == 'Invalid license.') ? false : $d;
+	}
 }
 
 ?>
