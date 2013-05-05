@@ -31,8 +31,8 @@ class PhoenixAPI
 	{
 		if( !$server == null ) 
 		{
-	    	$this->server = $server;
-	    }
+			$this->server = $server;
+		}
 	}
 
 	/**
