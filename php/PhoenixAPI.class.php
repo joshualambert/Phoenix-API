@@ -6,16 +6,21 @@
 * @author Alex / Phoenix <IAmPhoenix.me@gmail.com>
 * @link Website: http://api.iamphoenix.me/
 * @link GitHub: https://github.com/IAmPhoenix/Phoenix-API
-* @version v0.7
+* @version v0.8
 */
 
 class PhoenixAPI
 {
-	// use your unique license key
+	/** 
+	* use your unique license key
+	* 
+	* @link http://api.iamphoenix.me/profile.php See your license key
+	* @link http://api.iamphoenix.me/sign_up.php Signup to create a key
+	*/
 	public $license = "";
 
 	// define the server information
-	private $server, $handle;
+	private $server;
 
 	/**
 	* Save the server address for later use
@@ -121,7 +126,23 @@ class PhoenixAPI
 		return $this->createUrl( 'software' );
 	}
 
-	public function executeCommand( ) { }
+	/**
+	* Execute commands on a server
+	* This require rcon to be enabled
+	* 
+	* @link http://api.iamphoenix.me/index.php#rcon-commands
+	* @param string $password rcon password for the server
+	* @param string $command
+	* @return boolean
+	*/
+	public function executeCommand( $password, $command ) 
+	{
+		if( $password != null && $command != null )
+			$e = '&pass='.$password.'&cmd='.$command;
+		else
+			return 'Missing arguments';
+		return ($this->createUrl( 'rcon', false, false, $e ) == 'sent') ? true : false;
+	}
 
 	/**
 	* Check the votifier port on a server
