@@ -9,6 +9,7 @@ $api = new PhoenixAPI();
 // Set the server
 $api->setServer( 'your.server.com' );
 
+// Get the server version
 $version = $api->getVersion();
 
 // Example 1
