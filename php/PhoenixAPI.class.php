@@ -1,56 +1,12 @@
 <?php 
 
-/*
- *---------------------------------------------------------------
- * APPLICATION ENVIRONMENT
- *---------------------------------------------------------------
- *
- * You can load different configurations depending on your
- * current environment. Setting the environment also influences
- * things like logging and error reporting.
- *
- * This can be set to anything, but default usage is:
- *
- *     development
- *     production
- *
- * NOTE: If you change these, also change the error_reporting() code below
- *
- */
- 
-define('ENVIRONMENT', 'development');
-
-/*
- *---------------------------------------------------------------
- * ERROR REPORTING
- *---------------------------------------------------------------
- *
- * Different environments will require different levels of error reporting.
- * By default development will show errors but testing and live will hide them.
- */
-
-if ( defined('ENVIRONMENT') )
-{
-	switch ( ENVIRONMENT )
-	{
-		case 'development':
-			error_reporting(E_ALL);
-		break;
-	
-		case 'production':
-			error_reporting(0);
-		break;
-
-		default:
-			exit('The application environment is not set correctly.');
-	}
-}
-
 /**
 * Class written by Alex / Phoenix
-* 
-* Website: http://api.iamphoenix.me/
-* GitHub: https://github.com/IAmPhoenix/Phoenix-API
+*
+* @author Alex / Phoenix <IAmPhoenix.me@gmail.com>
+* @link Website: http://api.iamphoenix.me/
+* @link GitHub: https://github.com/IAmPhoenix/Phoenix-API
+* @version v0.7
 */
 
 class PhoenixAPI
@@ -64,10 +20,8 @@ class PhoenixAPI
 	/**
 	* Save the server address for later use
 	*
-	* @var $server string Server Address
-	* @return true boolean
+	* @param string $server
  	*/
-
 	public function setServer( $server )
 	{
 		if( !$server == null ) 
@@ -76,41 +30,92 @@ class PhoenixAPI
 	    }
 	}
 
+	/**
+	* Check is a server is online / offline
+	* 
+	* @link http://api.iamphoenix.me/#server-status
+	* @return boolean
+	*/
 	public function getStatus( ) 
 	{ 
 		return ($this->createUrl( 'status' ) == 'true') ? true : false;
 	}
 
+	/**
+	* Get information about the server if its online
+	* 
+	* @link http://api.iamphoenix.me/#server-info
+	* @return array (status, players, players_max, motd, version)
+	*/
 	public function getInfomation( ) 
 	{
 		return $this->createUrl( 'get', false, true );
 	}
 
+	/**
+	* Get the amount of players online
+	* 
+	* @link http://api.iamphoenix.me/#players
+	* @return array (players, players_max)
+	*/
 	public function getPlayers( ) 
 	{
 		return $this->createUrl( 'players', false, true );
 	}
 
+	/**
+	* Get a list of playernames that are on the server
+	* 
+	* @link http://api.iamphoenix.me/#player-list
+	* @return array (playersNames)
+	*/
 	public function getPlayerList( ) 
 	{
 		return $this->createUrl( 'list', true, true );
 	}
 
+	/**
+	* Get the servers Message of The Day
+	* 
+	* @link http://api.iamphoenix.me/#motd
+	* @param boolean $color
+	* @return string
+	*/
 	public function getMotd( $color = null ) 
 	{
 		return $this->createUrl( 'motd', true, null, (($color == true) ? '&color=true' : null) );
 	}
 
+	/**
+	* Get the servers Message of The Day
+	* 
+	* @link http://api.iamphoenix.me/#server-version
+	* @return string
+	*/
 	public function getVersion( ) 
 	{
 		return $this->createUrl( 'version' );
 	}
 
+	/**
+	* Get a list of Plugins on the server
+	* This require query to be enabled to work
+	* 
+	* @link http://api.iamphoenix.me/#query-plugins
+	* @return array (plugins)
+	*/
 	public function getPlugins( ) 
 	{
 		return $this->createUrl( 'plugins', true, true );
 	}
 
+	/**
+	* Get the software version the server is running on
+	* This require query to be enabled to work
+	* 
+	* @link http://api.iamphoenix.me/#query-software
+	* @return string
+	*/
 	public function getSoftware( ) 
 	{
 		return $this->createUrl( 'software' );
@@ -118,17 +123,48 @@ class PhoenixAPI
 
 	public function executeCommand( ) { }
 
+	/**
+	* Check the votifier port on a server
+	* This require votifier
+	* 
+	* @link http://api.iamphoenix.me/#votifier-test
+	* @return boolean
+	*/
 	public function voteTest( $port = null ) 
 	{
-		return $this->createUrl( 'votifier', true, null, (($port != null) ? ':'.$port : null) );
+		return ($this->createUrl( 'votifier', true, null, ':'.(($port != null) ? $port : 8192) ) == 'true') ? true : false;
 	}
 
+	/**
+	* Check the votifier port on a server
+	* This require votifier
+	* 
+	* @link http://api.iamphoenix.me/index.php#votifier-vote
+	* @param int $port Votifier port
+	* @param string $player Player name
+	* @param string $key Public votifier key
+	* @return boolean
+	*/
 	public function vote( $port, $player, $key ) 
 	{
-		$e = ':'.$port.'&player='.$players.'&key='.$key;
-		return $this->createUrl( 'votifiervote', true, null, $e );
+		if( $port != null && $player != null && $key != null )
+			$e = ':'.$port.'&player='.$players.'&key='.$key;
+		else
+			return 'Missing arguments';
+		return ($this->createUrl( 'votifiervote', true, null, $e ) == 'sent') ? true : false;
 	}
 
+	/**
+	* Generate the URL and fetch the data from the API
+	* This require votifier
+	* 
+	* @param string $m Method
+	* @param boolean $c Clearn output
+	* @param boolean $a Create array
+	* @param string $e Extra url fuctions
+	* @return boolean|string|array
+	* @access private
+	*/
 	protected function createUrl( $m, $c = true, $a = null, $e = null ) 
 	{ 
 		$d = file_get_contents('http://api.iamphoenix.me/'.$m.'/?api_key='.$this->license.'&server_ip='.$this->server.(($e != null) ? $e : null).(($c == true) ? '&clean=true' : null));
