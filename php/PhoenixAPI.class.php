@@ -6,7 +6,7 @@
 * @author Alex / Phoenix <IAmPhoenix.me@gmail.com>
 * @link Website: http://api.iamphoenix.me/
 * @link GitHub: https://github.com/IAmPhoenix/Phoenix-API
-* @version v0.8
+* @version v0.9
 */
 
 class PhoenixAPI
@@ -177,7 +177,6 @@ class PhoenixAPI
 
 	/**
 	* Generate the URL and fetch the data from the API
-	* This require votifier
 	* 
 	* @param string $m Method
 	* @param boolean $c Clearn output
