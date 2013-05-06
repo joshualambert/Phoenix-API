@@ -18,7 +18,7 @@ Look for these settings in **server.properties**:<br>
 > enable-rcon=true<br>
 > rcon.password=
 
-## PHP vs Java?
+## PHP or Java?
 
 There is both a PHP and Java version for this library so you easily can embed these functions into your application, plugin or website.
 
