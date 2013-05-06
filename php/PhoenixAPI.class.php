@@ -6,7 +6,7 @@
 * @author Alex / Phoenix <IAmPhoenix.me@gmail.com>
 * @link Website: http://api.iamphoenix.me/
 * @link GitHub: https://github.com/IAmPhoenix/Phoenix-API
-* @version v0.9
+* @version v0.9.1
 * @license Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
 * @link @license http://creativecommons.org/licenses/by-nc-sa/3.0/
 */
@@ -171,10 +171,10 @@ class PhoenixAPI
 	public function vote( $port, $player, $key ) 
 	{
 		if( $port != null && $player != null && $key != null )
-			$e = ':'.$port.'&player='.$players.'&key='.$key;
+			$e = ':'.$port.'&player='.$player.'&key='.$key;
 		else
 			return 'Missing arguments';
-		return ($this->createUrl( 'votifiervote', true, null, $e ) == 'sent') ? true : false;
+		return $this->createUrl( 'votifiervote', true, null, $e );
 	}
 
 	/**
