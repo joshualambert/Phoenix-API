@@ -7,6 +7,8 @@
 * @link Website: http://api.iamphoenix.me/
 * @link GitHub: https://github.com/IAmPhoenix/Phoenix-API
 * @version v0.9
+* @license Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
+* @link @license http://creativecommons.org/licenses/by-nc-sa/3.0/
 */
 
 class PhoenixAPI
